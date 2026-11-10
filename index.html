@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>مسابقة الجوائز</title>
+<meta name="theme-color" content="#075fd2">
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f3f6fa;color:#182233;font-family:Tahoma,Arial,sans-serif}
+button,input{font-family:inherit}.top{position:relative;background:linear-gradient(135deg,#064db8,#0877ef);color:#fff;text-align:center;padding:18px 14px 30px}
+.admin-link{position:absolute;top:12px;right:12px;background:#ffffff22;border:1px solid #ffffff66;color:#fff;border-radius:10px;padding:8px 10px;font-size:11px;text-decoration:none}
+h1{font-size:25px;margin:25px 0 7px}.sub{font-size:13px;opacity:.94}
+.wrap{max-width:520px;margin:-18px auto 30px;padding:0 14px}.card{background:#fff;border-radius:20px;padding:19px;box-shadow:0 7px 28px #173b6817;margin-bottom:14px}
+.progress{height:8px;background:#e8edf4;border-radius:20px;overflow:hidden;margin-bottom:18px}.progress i{display:block;height:100%;background:#0868df;width:25%;transition:.25s}
+.step{display:none}.step.active{display:block}.q{font-size:18px;font-weight:900;line-height:1.7;margin-bottom:13px}
+.opt{width:100%;background:#fff;border:1.5px solid #dce5f1;border-radius:13px;padding:14px;text-align:right;font-weight:800;margin:7px 0;cursor:pointer}.opt:hover{border-color:#0868df;background:#f6faff}
+.btn{border:0;border-radius:13px;padding:14px;width:100%;font-weight:900;font-size:15px;cursor:pointer}.blue{background:#0868df;color:#fff}.green{background:#159257;color:#fff}.red{background:#d53b43;color:#fff}.gray{background:#edf1f6;color:#263348}
+.result{display:none;text-align:center}.check{width:64px;height:64px;border-radius:50%;background:#e9f8f0;color:#168a55;display:flex;align-items:center;justify-content:center;font-size:34px;margin:auto}.amount{font-size:40px;color:#075fd2;font-weight:900;margin:7px 0}.note{font-size:12px;line-height:1.8;color:#68768b}
+.invite{background:#f4f8fd;border:1px solid #dbe8f7;border-radius:15px;padding:15px;margin:16px 0;text-align:center}.count{font-size:31px;font-weight:900;color:#075fd2}.small{font-size:11px;color:#738096}
+.modal{display:none;position:fixed;inset:0;background:#0008;z-index:50;padding:12px;align-items:center;justify-content:center}.modal.show{display:flex}.box{width:100%;max-width:520px;background:#fff;border-radius:20px;padding:19px;max-height:92vh;overflow:auto}.box h2{margin:0 0 10px}.channel{border:1px solid #dce5ef;border-radius:14px;padding:13px;margin:9px 0}.channel b{display:block;margin-bottom:5px}.channel a{color:#0868df;word-break:break-word;font-size:12px}.checkrow{display:flex;align-items:center;gap:8px;margin-top:9px;font-size:12px}
+.admin{display:none}.admin.show{display:block}.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.field{margin:9px 0}.field label{display:block;font-size:12px;font-weight:800;margin-bottom:5px}.field input,.field textarea{width:100%;padding:11px;border:1px solid #d9e1eb;border-radius:10px;outline:0}.field textarea{min-height:80px;resize:vertical}.stat{background:#f4f7fb;border-radius:12px;padding:12px;text-align:center}.stat b{font-size:24px;display:block;color:#075fd2}.danger-note{background:#fff5f5;border:1px solid #ffd7d7;border-radius:12px;padding:11px;font-size:11px;line-height:1.7;color:#7d3131}
+footer{text-align:center;color:#8994a5;font-size:10px;padding:5px 20px 30px}
+</style>
+</head>
+<body>
+
+<header class="top">
+<a class="admin-link" href="#" id="adminOpen">لوحة الادمن</a>
+<h1 id="siteTitle">شارك واربح حتى 3000 جنيه</h1>
+<div class="sub" id="siteSubtitle">أجب عن الأسئلة القصيرة واعرف نتيجتك.</div>
+</header>
+
+<main class="wrap">
+<section class="card" id="forceCard">
+<h3 style="margin:0 0 8px">الاشتراك الإجباري</h3>
+<p class="note">اشترك في القنوات التالية ثم اضغط «تحقق» للمتابعة.</p>
+<div id="channels"></div>
+<button class="btn green" id="verifyBtn">✓ تحقق من الاشتراك</button>
+<p class="note" id="verifyMsg"></p>
+</section>
+
+<section class="card" id="quizCard" style="display:none">
+<div class="progress"><i id="bar"></i></div>
+<div class="step active" data-step="1">
+<div class="q">السؤال 1 من 4<br>ما طريقة استلام الجائزة المفضلة لديك؟</div>
+<button class="opt" data-next="2">فودافون كاش</button><button class="opt" data-next="2">إنستا باي</button><button class="opt" data-next="2">محفظة أخرى</button>
+</div>
+<div class="step" data-step="2">
+<div class="q">السؤال 2 من 4<br>كم مرة تشارك في المسابقات؟</div>
+<button class="opt" data-next="3">أول مرة</button><button class="opt" data-next="3">أحيانًا</button><button class="opt" data-next="3">بشكل مستمر</button>
+</div>
+<div class="step" data-step="3">
+<div class="q">السؤال 3 من 4<br>ما نوع الجوائز الذي تفضله؟</div>
+<button class="opt" data-next="4">جوائز نقدية</button><button class="opt" data-next="4">كروت شحن</button><button class="opt" data-next="4">هدايا</button>
+</div>
+<div class="step" data-step="4">
+<div class="q">السؤال 4 من 4<br>هل تريد معرفة النتيجة الآن؟</div>
+<button class="opt" data-next="result">نعم، أظهر النتيجة</button><button class="opt" data-next="result">بالتأكيد</button>
+</div>
+<div class="result" id="result">
+<div class="check">✓</div><div class="q">مبروك! ظهرت نتيجتك</div><div class="amount">3,000 جنيه</div>
+<div class="invite"><b>قبل المطالبة بالجائزة</b><p class="note">شارك رابط المسابقة مع 20 شخصًا باستخدام أزرار المشاركة، ثم اضغط «تمت المشاركة».</p><div class="count" id="inviteCount">0 / 20</div></div>
+<div class="grid" style="margin-top:10px">
+<button class="btn green" id="waShare">مشاركة في واتساب</button>
+<button class="btn blue" id="tgShare">مشاركة في تليجرام</button>
+</div>
+<button class="btn blue" id="msShare" style="margin-top:8px">مشاركة في ماسنجر</button>
+<button class="btn green" id="doneBtn" style="margin-top:8px">تمت المشاركة</button>
+<button class="btn blue" id="claimBtn" style="display:none;margin-top:8px">إرسال إثبات الفوز</button>
+<p class="note">لن نطلب كلمة مرور أو رمز تحقق أو بيانات بطاقة بنكية.</p>
+</div>
+</section>
+</main>
+
+<footer>© 2026 • مسابقة الجوائز</footer>
+
+<div class="modal" id="modal"><div class="box">
+<div id="loginBox">
+<h2>لوحة الادمن</h2><div class="field"><label>كلمة المرور</label><input id="pass" type="password" placeholder="أدخل كلمة المرور"></div>
+<button class="btn blue" id="login">دخول</button><p class="note" id="loginMsg"></p>
+</div>
+<div class="admin" id="adminPanel">
+<h2>لوحة التحكم</h2>
+<div class="grid"><div class="stat">الزيارات<b id="visits">0</b></div><div class="stat">المشاركات<b id="shares">0</b></div></div>
+<div class="field"><label>عنوان الموقع</label><input id="aTitle"></div>
+<div class="field"><label>الوصف</label><input id="aSubtitle"></div>
+<div class="field"><label>رابط/نص الخلفية</label><input id="aBg" placeholder="ضع رابط صورة HTTPS أو اتركه فارغًا"></div>
+<div class="field"><label>إعلان الموقع</label><textarea id="aAd" placeholder="نص الإعلان الذي سيظهر للمستخدم"></textarea></div>
+<h3>القنوات الإجبارية</h3>
+<div class="field"><label>قناة تيليجرام - الاسم</label><input id="tgName"></div>
+<div class="field"><label>قناة تيليجرام - الرابط</label><input id="tgUrl"></div>
+<div class="field"><label>قناة واتساب - الاسم</label><input id="waName"></div>
+<div class="field"><label>قناة واتساب - الرابط</label><input id="waUrl"></div>
+<button class="btn green" id="save">حفظ التعديلات</button>
+<button class="btn gray" id="closeAdmin" style="margin-top:8px">إغلاق</button>
+<p class="danger-note" style="margin-top:10px">ملاحظة: هذا الملف يعمل كصفحة ثابتة. كلمة مرور الادمن وإحصائيات LocalStorage ليست حماية حقيقية من الهجمات، والتحقق الحقيقي من عضوية تيليجرام/واتساب يحتاج Backend أو Bot API.</p>
+</div>
+</div></div>
+
+<script>
+const ADMIN_PASSWORD="mezo123#A";
+const DEFAULT={
+title:"شارك واربح حتى 3000 جنيه",
+subtitle:"أجب عن الأسئلة القصيرة واعرف نتيجتك.",
+bg:"",
+ad:"",
+tgName:"اسعار الدهب حاليا",
+tgUrl:"https://t.me/kn_go",
+waName:"تابع قناة واتساب اسعار الدهب لحظة ب لحظة",
+waUrl:"https://whatsapp.com/channel/0029VbE6qMzEwEjpICFkEO2V"
+};
+const getCfg=()=>({...DEFAULT,...JSON.parse(localStorage.getItem("cfg")||"{}")});
+const cfg=getCfg();
+document.getElementById("siteTitle").textContent=cfg.title;
+document.getElementById("siteSubtitle").textContent=cfg.subtitle;
+if(cfg.bg) document.body.style.backgroundImage=`url("${cfg.bg}")`;
+if(cfg.ad) document.getElementById("siteSubtitle").textContent=cfg.ad;
+function renderChannels(){
+ const c=getCfg(), box=document.getElementById("channels");
+ box.innerHTML="";
+ [["tgName","tgUrl"],["waName","waUrl"]].forEach(([n,u])=>{
+  const d=document.createElement("div");d.className="channel";
+  d.innerHTML=`<b>${escapeHtml(c[n])}</b><a href="${escapeAttr(c[u])}" target="_blank" rel="noopener">${escapeHtml(c[u])}</a>`;
+  box.appendChild(d);
+ });
+}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+function escapeAttr(s){return escapeHtml(s)}
+renderChannels();
+
+let visits=Number(localStorage.getItem("visits")||0)+1;localStorage.setItem("visits",visits);
+let shares=Number(localStorage.getItem("shares")||0);
+document.getElementById("verifyBtn").onclick=()=>{
+ document.getElementById("verifyMsg").textContent="تم فتح روابط القنوات. التحقق الحقيقي من العضوية لا يمكن تأكيده من HTML وحده.";
+ document.getElementById("quizCard").style.display="block";
+ document.getElementById("forceCard").style.display="none";
+};
+
+document.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{
+ const n=b.dataset.next;
+ if(n==="result"){document.querySelectorAll(".step").forEach(x=>x.classList.remove("active"));document.getElementById("result").style.display="block";document.getElementById("bar").style.width="100%"}
+ else{document.querySelectorAll(".step").forEach(x=>x.classList.toggle("active",x.dataset.step===n));document.getElementById("bar").style.width=(Number(n)*25)+"%"}
+});
+let count=0;
+const shareText="شارك في المسابقة واربح حتى 3000 جنيه";
+const shareUrl=location.href;
+function openShare(url){
+ window.open(url,"_blank","noopener,noreferrer");
+}
+document.getElementById("waShare").onclick=()=>{
+ openShare("https://wa.me/?text="+encodeURIComponent(shareText+"\\n"+shareUrl));
+};
+document.getElementById("tgShare").onclick=()=>{
+ openShare("https://t.me/share/url?url="+encodeURIComponent(shareUrl)+"&text="+encodeURIComponent(shareText));
+};
+document.getElementById("msShare").onclick=()=>{
+ openShare("https://www.facebook.com/sharer/sharer.php?u="+encodeURIComponent(shareUrl));
+};
+document.getElementById("doneBtn").onclick=()=>{
+ count=20;
+ document.getElementById("inviteCount").textContent="20 / 20";
+ document.getElementById("claimBtn").style.display="block";
+ shares++;localStorage.setItem("shares",shares);
+};
+document.getElementById("claimBtn").onclick=()=>window.open("https://t.me/kdkdkfkcks?text="+encodeURIComponent("مرحبًا، أكملت المسابقة وأرسل Screenshot للنتيجة."),"_blank");
+
+const modal=document.getElementById("modal");
+document.getElementById("adminOpen").onclick=e=>{e.preventDefault();modal.classList.add("show")};
+document.getElementById("login").onclick=()=>{
+ if(document.getElementById("pass").value===ADMIN_PASSWORD){
+  document.getElementById("loginBox").style.display="none";document.getElementById("adminPanel").classList.add("show");
+  const c=getCfg();["aTitle","aSubtitle","aBg","aAd","tgName","tgUrl","waName","waUrl"].forEach((id,i)=>document.getElementById(id).value=c[["title","subtitle","bg","ad","tgName","tgUrl","waName","waUrl"][i]]);
+  document.getElementById("visits").textContent=visits;document.getElementById("shares").textContent=shares;
+ }else document.getElementById("loginMsg").textContent="كلمة المرور غير صحيحة.";
+};
+document.getElementById("save").onclick=()=>{
+ localStorage.setItem("cfg",JSON.stringify({title:aTitle.value,subtitle:aSubtitle.value,bg:aBg.value,ad:aAd.value,tgName:tgName.value,tgUrl:tgUrl.value,waName:waName.value,waUrl:waUrl.value}));
+ location.reload();
+};
+document.getElementById("closeAdmin").onclick=()=>modal.classList.remove("show");
+</script>
+</body>
+</html>
